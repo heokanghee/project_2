@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>HomeBook Form</title>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function(){
+	$('#revenue').prop('disabled', true);
+    $('#expense').prop('disabled', false);
+	
+    $('.section-radio').change(function(){
+        if($(this).val() == 'income') {
+            $('#revenue').prop('disabled', false);
+            $('#expense').prop('disabled', true);
+        } else {
+            $('#revenue').prop('disabled', true);
+            $('#expense').prop('disabled', false);
+        }
+    });
+});
+
+function setDefaultValues() {
+    if($('#revenue').val() == '') {
+        $('#revenue').val(0);
+    }
+    if($('#expense').val() == '') {
+        $('#expense').val(0);
+    }
+}
+
+$(document).on('submit', 'form', function(e) {
+    setDefaultValues();
+});
+</script>
+<style>
+input[type="radio"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+input[type="radio"] + label {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #000;
+    background-color: #ddd;
+}
+
+input[type="radio"]:checked + label {
+    background-color: #007bff;
+    color: #fff;
+}
+
+#revenue, #expense {
+    display: none;
+}
+
+.income #revenue {
+    display: block;
+}
+
+.expense #expense {
+    display: block;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h1>HomeBook Form</h1>
+		
+		<form method="post" th:action="@{/homebook/add}">
+			<div class="form-group">
+				<label for="mid">사용자:</label> 
+				<input type="text" name="mid" class="form-control" id="mid" th:value="${sessionId}" disabled/>
+			</div>	
+				<div class="form-group">
+				<label for="day">일자:</label> <input name="day" type="date"
+					class="form-control" id="day" placeholder="Enter Day"
+					required="true" />
+			</div>
+			<div class="form-group d-flex">
+						<div class="form-group">
+				<label for="section">수지구분:</label>
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					<label class="btn btn-secondary"> <input type="radio"
+						name="section" value="income" autocomplete="off" class="section-radio"> Income
+					</label> <label class="btn btn-secondary active"> <input
+						type="radio" name="section" value="expense" autocomplete="off"
+						checked class="section-radio"> Expense
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="accounttitle">계정과목:</label> <input
+					name="accounttitle" type="text" class="form-control"
+					id="accounttitle" placeholder="Enter Account Title"
+					required="true" />
+			</div>
+			<div class="form-group">
+				<label for="remark">상세내역</label> <input name="remark"
+					type="text" class="form-control" id="remark"
+					placeholder="Enter Remark" />
+			</div>
+			<div class="form-group income">
+				<label for="revenue">차변:</label> <input name="revenue"
+					type="number" class="form-control" id="revenue"
+					placeholder="Enter Revenue" required="true" value="0"/>
+			</div>
+			<div class="form-group expense">
+				<label for="expense">대변:</label> <input name="expense"
+					type="number" class="form-control" id="expense"
+					placeholder="Enter Expense" required="true" value="0"/>
+			</div>
+			
+			<div class="form-group">
+				<label for="mid">사용자:</label> 
+				<input type="hidden" name="mid" class="form-control" id="mid" required="true" th:value="${sessionId}"/>
+			</div>	
+		
+			<div class="form-group">
+				<label for="password">패스워드확인:</label> <input name="password"
+					type="password" class="form-control" id="password"
+					placeholder="Enter Password" required="true" />
+			</div>
+			<div th:if="${error}" class="alert alert-danger" role="alert">
+        	<span th:text="${error}"></span>
+    		</div>
+			
+			
+			<button type="submit" class="btn btn-primary">Submit</button>
+			<button type="button" class="btn btn-primary" onclick="history.back()">뒤로가기</button>
+			
+			
+		</form>
+	</div>
+		<!-- Bootstrap JS -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

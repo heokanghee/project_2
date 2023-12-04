@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Member List</title>
+<!-- add Bootstrap CDN links -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<style>
+	table{
+		line-height:70%;
+	}
+</style>
+</head>
+<body>
+<h1 align="center">동호/회원/명단</h1>
+<div class="container">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>회원ID:</th>
+				<th>이름:</th>
+				<th>이메일:</th>
+				<th>전화:</th>
+				<th>가입일자:</th>
+				<th colspan ='2'>정보수정:</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="x : ${memberList}">
+				<td th:text="${x.id}"></td>
+				<td th:text="${x.name}"></td>
+				<td th:text="${x.email}"></td>
+				<td th:text="${x.phone}"></td>
+				<td th:text="${x.indate}"></td>
+				<td th:if="${session.id == x.id}"><a th:href="@{'../member/updateForm/' + ${x.id}}">EDIT</a></td>
+			
+			</tr>
+		</tbody>
+	</table>
+	<a href="/login" class="btn btn-primary">로그인가기</a>
+	<a href="/" class="btn btn-primary">메인가기</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Update Blog</title>
+<!-- Add Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<style>
+.readonly {
+	background-color: red;
+	color: GREEN;
+}
+
+h1 {
+	font-size: 2.25rem;
+	line-height: 1.5;
+}
+
+.title {
+	background-color: lightgreen;
+}
+
+textarea {
+	height: 400px;
+}
+</style>
+</head>
+<body>
+	<div class="container mt-5">
+		<h1 class="text-center title">Update Blog</h1>
+		<form action="update" method="POST">
+			<div class="form-group">
+				<label for="sn">블로그번호:</label> <input type="text"
+					class="form-control readonly" name="sn" th:value="${blog.sn}"
+					readonly>
+			</div>
+			
+			<div class="form-group">
+				<label for="title">제목:</label> <input type="text"
+					class="form-control" name="title" th:value="${blog.title} " >
+			</div>
+			
+			<div class="form-group">
+				<label for="description">요약설명:</label> <input type="text"
+					class="form-control" name="description" th:value="${blog.description}">
+			</div>
+			<div class="form-group">
+				<label for="content">내용:</label>
+				<textarea class="form-control" name="content"
+					style="height: 400px;" th:text="${blog.content}"></textarea>
+			</div>
+			<input type="hidden" name="create_dt"
+               th:value="${blog.create_dt}" />
+			<input type="hidden" name="modify_dt"
+               th:value="${blog.modify_dt}" />
+
+			<div class="form-group">
+				<input type="submit" class="btn btn-primary" value="수정">
+				<button type="button" class="btn btn-primary"
+					onclick="history.back()">뒤로가기</button>
+			</div>
+		</form>
+	</div>
+	<!-- Add Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

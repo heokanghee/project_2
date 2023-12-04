@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Search</title>
+    <!-- 부트스트랩 링크 추가 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">블로그 검색</h1>
+        <form action="/blog/search_proc" method="post" class="mt-3">
+            <div class="input-group">
+                <input type="text" name="slug" class="form-control" placeholder="블로그 검색어를 입력하세요">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 검색 결과 영역 -->
+        <div class="row mt-5" id="searchResults">
+            <div class="col-md-12">
+                <h2>검색 결과</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>블로그번호</th>
+                            <th>제목</th>
+                            <th>요약설명</th>
+                            <th>작성일자</th>
+                            <th>수정일자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 검색 결과를 Thymeleaf를 사용하여 동적으로 표시 -->
+                        <tr th:each="blog : ${searchblogs}">
+                            <td th:text="${blog.sn}">Blog ID</td>
+                            <td>
+                                <a th:href="@{/blog/content_view(sn=${blog.sn})}" th:text="${blog.title}"></a>
+                            </td>
+                            <td th:text="${blog.description}">Description</td>
+                            <td th:text="${blog.create_dt}">Creation Date</td>
+                            <td th:text="${blog.modify_dt}">Modification Date</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+        <a href="/" class="btn btn-primary">메인가기</a>
+    </div>
+    <!-- 부트스트랩 JavaScript 및 jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

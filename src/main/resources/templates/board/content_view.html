@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>게시글보기</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('.deleteBtn').click(function() {
+			var bid = parseInt($(this).data('bid'), 10); // 10진수 형식으로 변환
+			console.log('bid:', bid);// add this line to check the value of bid
+			$.ajax({
+				type : 'DELETE',
+				url : '/board/delete/' + bid,
+				success : function() {
+					window.location.href = '/board/list';
+				}
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<div align="right">
+		<button type="button" class="btn btn-primary"
+			onclick="location.href='/'">메인</button>
+	</div>
+	<h1 align="center">게시글상세보기</h1>
+	<hr>
+	<div class="container">
+		<table class="table table-bordered" width="500" cellpadding="0"
+			cellspacing="0" border="1">
+			<form action="edit" method="post" th:object="${content_view}">
+				<input type="hidden" name="bid" th:value="${content_view.bid}">
+				<tr>
+					<td>번호</td>
+					<td th:text="${content_view.bid}"></td>
+				</tr>
+				<tr>
+					<td>히트</td>
+					<td th:text="${content_view.bhit}"></td>
+				</tr>
+				<tr>
+					<td>이름</td>
+					<td th:text="${content_view.mid}"></td>
+				</tr>
+				<tr>
+					<td>제목</td>
+					<td th:text="${content_view.btitle}"></td>
+				</tr>
+				<tr>
+					<td>내용</td>
+					<td><textarea class="form-control" rows="10" name="bcontent"
+							disabled="disabled" th:text="${content_view.bcontent}"></textarea>
+					</td>
+				</tr>
+				<tr>
+
+					<td colspan="2">
+						<div class="btn-group">
+							<a class="btn btn-primary" href="/board/list">목록</a> &nbsp;&nbsp;
+							<a class="btn btn-primary"
+								th:href="@{/board/reply_view(bid=${content_view.bid})}">댓글</a>&nbsp;&nbsp;
+							<a class="btn btn-danger deleteBtn"
+								th:classappend="${#strings.equals(session.id, content_view.mid)} ? '' : 'disabled'"
+								th:data-bid="${content_view.bid}" data-type="number">삭제</a>&nbsp;&nbsp;
+						</div>
+					</td>
+
+				</tr>
+			</form>
+		</table>
+	</div>
+</body>
+</html>

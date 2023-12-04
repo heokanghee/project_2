@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>HomeBook Edit Form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script th:inline="javascript">
+        function checkPassword() {
+            var inputPassword = document.getElementById("password").value; // 입력한 패스워드 var
+            memberPassword = [[${userPwd}]]; // DB에서 가져온 패스워드
+            //memberPassword = '${userPwd}'; // DB에서 가져온 패스워드
+            alert(inputPassword+":"+memberPassword);
+            if (inputPassword != memberPassword) {
+                alert('패스워드가 맞지 않아요!');
+                return false; // submit을 중단합니다.
+            }
+            return true; // submit을 진행합니다.
+        }
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>가계부 수정 폼</h1>
+    <form method="post" th:action="@{/homebook/update}" onsubmit="return checkPassword();">
+        <input type="hidden" name="mid" th:value="${session.id}"/>
+        <input type="hidden" name="pwd" th:value="${session.password}"/>
+        <input type="hidden" name="serialno" th:value="${homebookVo.serialno}"/>
+        <div class="form-group">
+            <label for="day">Day:</label>
+            <input name="day" type="date" class="form-control" id="day"
+                   placeholder="Enter Day" th:value="${homebookVo.day}" required/>
+        </div>
+        <div class="form-group">
+            <label for="section">Section:</label>
+            <input name="section" type="text" class="form-control"
+                   id="section" placeholder="Enter Section" th:value="${homebookVo.section}" required/>
+        </div>
+        <div class="form-group">
+            <label for="accounttitle">Account Title:</label>
+            <input name="accounttitle" type="text" class="form-control"
+                   id="accounttitle" placeholder="Enter Account Title" th:value="${homebookVo.accounttitle}" required/>
+        </div>
+        <div class="form-group">
+            <label for="remark">Remark:</label>
+            <input name="remark" type="text" class="form-control"
+                   id="remark" th:value="${homebookVo.remark}" placeholder="Enter Remark"/>
+        </div>
+        <div class="form-group">
+            <label for="revenue">Revenue:</label>
+            <input name="revenue" type="number" class="form-control"
+                   id="revenue" placeholder="Enter Revenue" th:value="${homebookVo.revenue}" required/>
+        </div>
+        <div class="form-group">
+            <label for="expense">Expense:</label>
+            <input name="expense" type="number" class="form-control"
+                   id="expense" placeholder="Enter Expense" th:value="${homebookVo.expense}" required/>
+        </div>
+        <div class="form-group">
+        <label for="password">Password:</label>
+        <input name="password" type="password"
+               class="form-control" id="password"
+               placeholder="Enter Password" required/>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="history.back()">뒤로가기</button>
+        </form>
+    </div>
+    <!-- jQuery -->
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

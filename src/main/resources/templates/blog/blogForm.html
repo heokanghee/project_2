@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Blog Form</h1>
+    <form method="post" th:action="@{/blog/add}">
+        <input type="hidden" name="sn"
+               th:value="${session.sn}" />
+               
+        <div class="form-group">
+            <label for="title">제목:</label>
+            <input name="title" type="text"
+                   class="form-control" id="title" required="true"></input>
+        </div>  
+             
+		<div class="form-group">
+            <label for="description">요약:</label>
+            <input name="description" type="text"
+                   class="form-control" id="description" required="true"></input>
+        </div>
+        
+        <div class="form-group">
+            <label for="content">내용:</label>
+            <textarea name="content" type="text" class="form-control"
+                      id="content"></textarea>
+        </div>
+        
+             
+        <div class="form-group">
+            <label for="create_dt">블로그게시일자:</label>
+            <div id="create_dt" th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+		</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="modify_dt">최근수정일자:</label>
+            <div id="modify_dt" th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+		</div>
+        </div>
+ 
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="history.back()">뒤로가기</button>
+    </form>
+</div>
+<!-- jQuery -->
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

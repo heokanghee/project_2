@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Board Form</h1>
+    <form method="post" th:action="@{/board/add}">
+        <input type="hidden" name="mid"
+               th:value="${session.id}" />
+
+        <div class="form-group">
+            <label for="bdate">BDATE:</label>
+            <div id="xbdate" th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></div>
+        <div class="form-group">
+            <label for="btitle">BTITLE:</label>
+            <input name="btitle" type="text"
+                   class="form-control" id="btitle" required="true"></input>
+        </div>
+
+        <div class="form-group">
+            <label for="bcontent">BCONTENT:</label>
+            <textarea name="bcontent" type="text" class="form-control"
+                      id="bcontent"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input name="password"
+                   type="password" class="form-control" id="password"
+                   placeholder="Enter Password" required="true"></input>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="history.back()">뒤로가기</button>
+    </form>
+</div>
+<!-- jQuery -->
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Board List</title>
+
+<!-- add Bootstrap CDN links -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script th:inline="javascript">
+	function checkPassword(bid, mid, bstep, bgroup) {
+		console.log('checkPassword function called');
+		var password = prompt("비밀번호를 입력하세요", "");
+		if (password != null) {
+			//var hashedPassword = md5(password); // md5 함수 사용하여 해싱
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "./delete");
+			xhr.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded");
+			xhr.responseType = "text";
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						location.reload(); // 화면 새로고침
+						console.log('delete success');
+					} else {
+						alert('There was a problem with the request.');
+					}
+				}
+			};
+			xhr.send("bid=" + bid + "&mid=" + mid + "&password=" + password
+					+ "&bstep=" + bstep + "&bgroup=" + bgroup);
+		}
+	}
+</script>
+
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 10px; /* Adjust the padding to control spacing */
+    text-align: center; /* Center align text if needed */
+}
+
+th {
+    background-color: #f2f2f2; /* Optional background color for header */
+}
+
+/* You can adjust the font size as needed */
+th, td {
+    font-size: 14px;
+}
+
+.btn {
+    height: 30px; /* Adjust the button height as needed */
+}
+
+.btn-primary {
+    height: 30px; /* Adjust the button height as needed */
+}
+</style>
+</head>
+<body>
+	<h1 align="center">게시글목록</h1>
+	<div class="container">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>게시글번호</th>
+					<th>게시자ID</th>
+					<th>제목</th>
+					<th>작성일자</th>
+					<th>조회수</th>
+					<th>본글그룹</th>
+					<th>댓글순서</th>
+					<th>들여쓰기</th>
+					<th colspan="2">편집/삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="board, loop : ${boardList}"
+					th:class="${loop.index %2 == 0} ? 'table-light' : 'table-secondary'">
+					<td th:text="${board.bid}"></td>
+					<td th:text="${board.mid}"></td>
+					
+					<td th:style="'text-align: left; padding-left: ' + ${board.bindent * 15} + 'px;'">
+						<a th:href="@{/board/content_view(bid=${board.bid})}"
+						th:text="${board.btitle}"></a>
+					</td>
+
+
+					<td th:text="${board.bdate}"></td>
+					<td th:text="${board.bhit}"></td>
+					<td th:text="${board.bgroup}"></td>
+					<td th:text="${board.bstep}"></td>
+					<td th:text="${board.bindent}"></td>
+
+					<td th:if="${board.mid == session.id}">
+						<button type="button" class="btn btn-primary"
+							th:onclick="|location.href='edit?bid=${board.bid}'|">EDIT</button>
+					</td>
+					<td th:if="${board.mid == session.id}">
+						<button type="button" class="btn btn-warning btn-sm"
+							data-toggle="tooltip" data-placement="top" title="Delete"
+							th:data-bid="${board.bid}" th:data-mid="${board.mid}"
+							th:data-bstep="${board.bstep}" th:data-bgroup="${board.bgroup}"
+							onclick="checkPassword(this.getAttribute('data-bid'), this.getAttribute('data-mid'),this.getAttribute('data-bstep'),this.getAttribute('data-bgroup'))">Delete
+						</button>
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="row">
+			<div class="col-md-12">
+				<a href="/board/boardform" class="btn btn-primary btn-sm">글쓰기</a> <a
+					href="/" class="btn btn-primary">메인가기</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

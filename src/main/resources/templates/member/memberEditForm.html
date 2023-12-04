@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Edit Form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<script>
+	function checkPassword() {
+		var inputPassword = document.getElementById("password").value; // 입력한 패스워드 var
+		var memberPassword = document.getElementById("memberPassword").value; // 히든 필드의 값 가져오기
+		alert(inputPassword + ":" + memberPassword);
+		if (inputPassword != memberPassword) {
+			alert('패스워드가 맞지 않아요!');
+			return false; // submit을 중단합니다.
+		}
+		return true; // submit을 진행합니다. 
+	}
+	function goBack() {
+		window.history.back();
+	}
+</script>
+<body>
+    <div class="container mt-5">
+        <h1>Member Edit Form</h1>
+        <form th:action="@{/member/updateMember}" method="post" onsubmit="return checkPassword();">
+            <input type="hidden" th:field="${member.id}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" th:field="${member.name}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" th:field="${member.email}">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" th:field="${member.phone}">
+            </div>
+            <div class="form-group">
+                <label for="indate">최근정보일</label>
+                <div th:text="${#temporals.format(member.indate, 'yyyy-MM-dd')}"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" th:field="${member.password}">
+            </div>
+             <input type="hidden" id="memberPassword" th:value="${member.password}" /> <!-- 히든 필드에 member.password 값 추가 -->
+            
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a th:href="@{/}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

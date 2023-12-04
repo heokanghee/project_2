@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<title>HomeBook List</title>
+	<!-- add Bootstrap CDN links -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script>
+		//location.reload();
+		function checkPassword(serialno, mid) {
+			console.log('checkPassword function called'); // 로그 추가
+			var password = prompt("비밀번호를 입력하세요", "");
+			if (password != null) {
+				// 삭제 요청 보내기
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", "/homebook/delete");
+				xhr.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded");
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === XMLHttpRequest.DONE) {
+						if (xhr.status === 200) {
+							location.reload(); // 화면 새로고침
+							// 응답이 성공적으로 완료되면 responseText 속성을 사용하여 응답 본문을 가져옵니다.
+							var responseText = xhr.responseText;
+						} else {
+							alert('리퀘스트에 어떤 문제점이 생겼어요!');
+						}
+					}
+				};
+				xhr.responseType = "text";
+				xhr.send("serialno=" + serialno + "&password=" + password + "&mid="
+					+ mid);
+			}
+		}
+	</script>
+	<style>
+		table {
+			line-height: 70%;
+		}
+
+		td:nth-child(5) {
+			white-space: nowrap;
+		}
+
+		.btn {
+			height: 70%;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 align="center">내 가계부 목록</h1>
+	<div class="container">
+
+		<!-- 추가: 사용자가 로그인되지 않은 경우 경고 메시지 표시 -->
+		<div th:if="${session.editer == null}">
+			<div class="alert alert-warning" role="alert">
+				로그인이 필요합니다.
+				<a href="/main" class="alert-link">메인 화면으로 돌아가기</a>
+			</div>
+		</div>
+
+
+		<table class="table table-striped" th:if="${session.editer != null}">
+			<thead>
+				<tr>
+					<th>감사번호:</th>
+					<th>일자:</th>
+					<th>수지구분:</th>
+					<th>계정과목:</th>
+					<th>상세내역:</th>
+					<th>차변(수입):</th>
+					<th>대변(지출):</th>
+					<th>회원아이디:</th>
+					<th colspan='2'>Action:</th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				<tr th:each="x, i : ${homebookList}" th:class="${i.index % 2 == 0 ? 'table-light' : 'table-secondary'}">
+					<td th:text="${x.serialno}"></td>
+					<td th:text="${x.day}"></td>
+					<td th:text="${x.section}"></td>
+					<td th:text="${x.accounttitle}"></td>
+					<td th:text="${x.remark}"></td>
+					<td th:text="${x.revenue}"></td>
+					<td th:text="${x.expense}"></td>
+					<td th:text="${x.mid}"></td>
+					<td>
+						<!-- 
+					<a style="color: #000000;" th:href="@{/homebook/edit(serialno=${x.serialno})}">EDIT</a>
+					 -->
+
+						<button type="button" class="btn btn-primary"
+							th:onclick="|location.href='/homebook/edit?serialno=${x.serialno}'|">EDIT</button>
+					<td>
+					<td>
+						<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top"
+							title="Delete" th:data-sn="${x.serialno}" th:data-mid="${x.mid}"
+							onclick="checkPassword(this.getAttribute('data-sn'), this.getAttribute('data-mid'))">Delete</button>
+					</td>
+
+
+				</tr>
+			</tbody>
+		</table>
+		<a href="/homebook/form" class="btn btn-primary">가계부 추가</a> <a href="/" class="btn btn-primary">메인가기</a>
+
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Error!</h4>
+            <hr>
+            <p th:text="${errorMsg}"></p>
+            <a href="#" onclick="history.back();" class="btn btn-primary mt-3">Go Back</a>
+        </div>
+    </div>
+</body>
+</html>

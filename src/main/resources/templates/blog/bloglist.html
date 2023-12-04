@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Blog List</title>
+
+	<!-- add Bootstrap CDN links -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<script th:inline="javascript">
+		function checkPassword() {
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "./delete");
+			xhr.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded");
+			xhr.responseType = "text";
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						location.reload(); // 화면 새로고침
+						console.log('delete success');
+					} else {
+						alert('There was a problem with the request.');
+					}
+				}
+			};
+			xhr.send("bid=" + bid + "&mid=" + mid + "&password=" + password
+				+ "&bstep=" + bstep + "&bgroup=" + bgroup);
+		}
+
+	</script>
+
+	<style>
+		table {
+			line-height: 70%;
+		}
+
+		td:nth-child(5) {
+			white-space: nowrap;
+		}
+
+		.btn {
+			height: 70%;
+		}
+
+		.btn-primary {
+			height: 35px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 align="center">블로그목록</h1>
+	<div class="container">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>블로그번호</th>
+					<th>제목</th>
+					<th>요약설명</th>
+					<th>작성일자</th>
+					<th>수정일자</th>
+					<th colspan="2">편집/삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="blog, loop : ${blogList}"
+					th:class="${loop.index %2 == 0} ? 'table-light' : 'table-secondary'">
+					<td th:text="${blog.sn}"></td>
+					<td th:style="'padding-left: 15px;'">
+						<a th:href="@{/blog/content_view(sn=${blog.sn})}" th:text="${blog.title}"></a>
+					</td>
+					<td th:text="${blog.description}"></td>
+					<td th:text="${blog.create_dt}"></td>
+					<td th:text="${blog.modify_dt}"></td>
+
+					<div th:if="${session.editer == 'true'}">
+						<!-- 권한이 있는 경우 -->
+						<td>
+							<button type="button" class="btn btn-primary"
+								th:onclick="|location.href='edit?sn=${blog.sn}'|">EDIT</button>
+						</td>
+					</div>
+					<div th:unless="${session.editer == 'true'}">
+						<td>edit권한없음</td>
+					</div>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="row">
+			<div class="col-md-12">
+				<a href="/blog/blogform" class="btn btn-primary btn-sm">글쓰기</a>
+				<a href="/" class="btn btn-primary">메인가기</a>
+				<a href="/blog/search" class="btn btn-primary">서치</a>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
